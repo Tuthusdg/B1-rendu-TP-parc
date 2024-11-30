@@ -216,3 +216,168 @@ unuser@10.1.1.1's password:
 Last login: Fri Nov 29 23:53:53 2024 from 10.1.1.3
 [unuser@web ~]$
 ```
+
+
+# II. Service HTTP
+
+## 1. Mise en place
+
+installer le serveur NGINX
+
+```bash
+[unuser@web ~]$ sudo dnf install nginx
+[sudo] password for unuser:
+Rocky Linux 9 - BaseOS                                                                12 kB/s | 4.1 kB     00:00
+Rocky Linux 9 - AppStream                                                             18 kB/s | 4.5 kB     00:00
+Rocky Linux 9 - Extras                                                                11 kB/s | 2.9 kB     00:00
+Dependencies resolved.
+=====================================================================================================================
+ Package                        Architecture        Version                             Repository              Size
+=====================================================================================================================
+Installing:
+ nginx                          x86_64              2:1.20.1-20.el9.0.1                 appstream               36 k
+Installing dependencies:
+ nginx-core                     x86_64              2:1.20.1-20.el9.0.1                 appstream              566 k
+ nginx-filesystem               noarch              2:1.20.1-20.el9.0.1                 appstream              8.4 k
+ rocky-logos-httpd              noarch              90.15-2.el9                         appstream               24 k
+
+Transaction Summary
+=====================================================================================================================
+Install  4 Packages
+
+Total download size: 634 k
+Installed size: 1.8 M
+Is this ok [y/N]: y
+Downloading Packages:
+(1/4): nginx-filesystem-1.20.1-20.el9.0.1.noarch.rpm                                  93 kB/s | 8.4 kB     00:00
+(2/4): rocky-logos-httpd-90.15-2.el9.noarch.rpm                                      258 kB/s |  24 kB     00:00
+(3/4): nginx-1.20.1-20.el9.0.1.x86_64.rpm                                            365 kB/s |  36 kB     00:00
+(4/4): nginx-core-1.20.1-20.el9.0.1.x86_64.rpm                                       3.2 MB/s | 566 kB     00:00
+---------------------------------------------------------------------------------------------------------------------
+Total                                                                                1.3 MB/s | 634 kB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                             1/1
+  Running scriptlet: nginx-filesystem-2:1.20.1-20.el9.0.1.noarch                                                 1/4
+  Installing       : nginx-filesystem-2:1.20.1-20.el9.0.1.noarch                                                 1/4
+  Installing       : nginx-core-2:1.20.1-20.el9.0.1.x86_64                                                       2/4
+  Installing       : rocky-logos-httpd-90.15-2.el9.noarch                                                        3/4
+  Installing       : nginx-2:1.20.1-20.el9.0.1.x86_64                                                            4/4
+  Running scriptlet: nginx-2:1.20.1-20.el9.0.1.x86_64                                                            4/4
+  Verifying        : rocky-logos-httpd-90.15-2.el9.noarch                                                        1/4
+  Verifying        : nginx-filesystem-2:1.20.1-20.el9.0.1.noarch                                                 2/4
+  Verifying        : nginx-2:1.20.1-20.el9.0.1.x86_64                                                            3/4
+  Verifying        : nginx-core-2:1.20.1-20.el9.0.1.x86_64                                                       4/4
+
+Installed:
+  nginx-2:1.20.1-20.el9.0.1.x86_64                             nginx-core-2:1.20.1-20.el9.0.1.x86_64
+  nginx-filesystem-2:1.20.1-20.el9.0.1.noarch                  rocky-logos-httpd-90.15-2.el9.noarch
+
+Complete!
+```
+
+
+
+Démarrer le service NGINX
+
+```bash
+[unuser@web ~]$ sudo systemctl start nginx
+```
+
+
+Déterminer sur quel port tourne NGINX
+```bash
+[unuser@web ~]$ sudo ss -tlnp | grep nginx
+LISTEN 0      511          0.0.0.0:80        0.0.0.0:*    users:(("nginx",pid=1466,fd=6),("nginx",pid=1465,fd=6))
+LISTEN 0      511             [::]:80           [::]:*    users:(("nginx",pid=1466,fd=7),("nginx",pid=1465,fd=7))
+```
+
+
+firewall
+
+```bash
+[unuser@web ~]$ sudo firewall-cmd --permanent --add-port=80/tcp
+success
+[unuser@web ~]$ sudo firewall-cmd --reload
+success
+```
+
+Déterminer le processus lié au service NGINX
+
+```bash
+[unuser@web ~]$ ps -ef | grep nginx
+root        1465       1  0 12:05 ?        00:00:00 nginx: master process /usr/sbin/nginx
+nginx       1466    1465  0 12:05 ?        00:00:00 nginx: worker process
+```
+
+Déterminer le nom de l'utilisateur que lance nginx
+
+```bash
+[unuser@web ~]$ sudo cat /etc/passwd | grep nginx
+nginx:x:996:993:Nginx web server:/var/lib/nginx:/sbin/nologin
+```
+l'utilisateurqui lance nginx est nginx
+
+
+test
+```git bash
+$ curl http://10.1.1.1:80 | head
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  7620  100  7620<!doctype html>  0      0 --:--:-- --:--:-- --:--:--     0
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>HTTP Server Test Page powered by: Rocky Linux</title>
+    <style type="text/css">
+      /*<![CDATA[*/
+
+      html {
+100  7620  100  7620    0     0   649k      0 --:--:-- --:--:-- --:--:--  676k
+curl: Failed writing body
+```
+
+
+## 2 Analyser la conf de NGINX
+
+Déterminer le path du fichier de configuration de NGINX
+```bash
+[unuser@web ~]$ ls -al /etc/nginx/nginx.conf
+-rw-r--r--. 1 root root 2334 Nov  8 17:43 /etc/nginx/nginx.conf
+```
+
+trouver dans le fichier conf
+
+```bash
+[unuser@web ~]$ cat /etc/nginx/nginx.conf | grep 80 -A 14
+        listen       80;
+        listen       [::]:80;
+        server_name  _;
+        root         /usr/share/nginx/html;
+
+        # Load configuration files for the default server block.
+        include /etc/nginx/default.d/*.conf;
+
+        error_page 404 /404.html;
+        location = /404.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+        }
+    }
+```
+
+```bash
+[unuser@web ~]$ cat /etc/nginx/nginx.conf | grep "include /usr/"
+include /usr/share/nginx/modules/*.conf;
+```
+
+```grep 
+[unuser@web ~]$ cat /etc/nginx/nginx.conf | grep "user n"
+user nginx;
+```

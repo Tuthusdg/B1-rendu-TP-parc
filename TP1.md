@@ -457,3 +457,52 @@ $ curl 10.1.1.1:18178
 <h1> MEOW mon premier serveur web <h1>
 
 ```
+
+
+
+# III.Monitoring et alerting
+
+
+
+```bash
+[unuser@monitoring ~]$ sudo ss -tlnp | grep netdata
+LISTEN 0      4096       127.0.0.1:8125       0.0.0.0:*    users:(("netdata",pid=2966,fd=46))
+LISTEN 0      4096         0.0.0.0:19999      0.0.0.0:*    users:(("netdata",pid=2966,fd=6))
+LISTEN 0      4096           [::1]:8125          [::]:*    users:(("netdata",pid=2966,fd=45))
+LISTEN 0      4096            [::]:19999         [::]:*    users:(("netdata",pid=2966,fd=7))
+[unuser@monitoring ~]$ sudo firewall-cmd --permanent --add-port=19999/tcp
+success
+[unuser@monitoring ~]$ sudo firewall-cmd --reload
+success
+```
+
+Donc netdata écoute sur 19999
+
+
+```bash
+maybelater@DESKTOP-LH8R8DE MINGW64 ~
+$ curl http://10.1.1.2:19999 | head 7
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0head: cannot open '7' for reading: No such file or directory
+ 63  106k   63 69709    0     0  1857k      0 --:--:-- --:--:-- --:--:-- 1890k
+curl: (23) Failure writing output to destination, passed 16384 returned 4019
+```
+
+
+
+```bash
+
+jobs:
+  - name: WEB.web.tp1.b1
+    host: 10.1.1.1
+    ports:
+      - 18178
+
+  - name: SSH.web.tp1.b1
+    host: 10.1.1.1
+    ports:
+      - 22
+
+
+```

@@ -377,7 +377,83 @@ trouver dans le fichier conf
 include /usr/share/nginx/modules/*.conf;
 ```
 
-```grep 
+```bash 
 [unuser@web ~]$ cat /etc/nginx/nginx.conf | grep "user n"
 user nginx;
+```
+
+
+```bash
+[unuser@web conf.d]$ echo $RANDOM
+5361
+[unuser@web conf.d]$ sudo nano site1_tp1
+[unuser@web conf.d]$ sudo firwall-cmd --permanent --remove-port=80/tcp
+sudo: firwall-cmd: command not found
+[unuser@web conf.d]$ sudo firewall-cmd --permanent --remove-port=80/tcp
+success
+[unuser@web conf.d]$ sudo firewall-cmd --permanent --add-port=5361/tcp
+success
+```
+
+
+fichier config nginx 
+
+```bash
+
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
+
+# Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 4096;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+    include /etc/nginx/conf.d/*.conf;
+}
+           
+```
+
+
+```bash
+[unuser@web default.d]$ echo $RANDOM
+18178
+```
+
+
+```bash
+  GNU nano 5.6.1            /etc/nginx/default.d/tp1_conf.conf                       server {
+  # le port choisi devra être obtenu avec un 'echo $RANDOM' là encore
+  listen 18178;
+
+  root /var/www/tp1_parc;
+}
+```
+
+```bash
+$ curl 10.1.1.1:18178
+<h1> MEOW mon premier serveur web <h1>
+
 ```

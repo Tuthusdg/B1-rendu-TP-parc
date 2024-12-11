@@ -135,3 +135,9 @@ echo "Voici ton image de chat $CAT_IMG "
 [unuser@node1 scripts]$ ls -la /opt/ | grep id.sh
 -rwxr-xr-x.  1 unuser unuser 305 Dec 11 17:28 id.sh
 ```
+
+🌞 Vous fournirez dans le compte-rendu :
+```bash
+[unuser@node1 yt]$ cat download.log 
+12/11/24 22:24:28 Video https://youtu.be/KjoJSB_ZpVk?si=nse1US5b2kUUvW38 was downloaded. File path: /opt/yt/downloads/reuf_five
+```

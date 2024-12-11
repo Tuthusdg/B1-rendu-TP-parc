@@ -110,3 +110,28 @@ Actuellement :
 
 Python est bien installé sur la machine au chemin : $PYTHON_PATH"
 ```
+
+🌞 Le script id.sh affiche l'état du firewall
+
+```bash
+FIREWALL_STATE=$(systemctl is-active firewalld)
+if [ "$FIREWALL_STATE" == "active" ]
+then
+    echo 'Your firewall is active'
+else
+    echo 'Your firewall is inactive'
+fi
+```
+
+🌞 Le script id.sh affiche l'URL vers une photo de chat random
+```bash
+CAT_IMG=$(curl -s https://api.thecatapi.com/v1/images/search | jq -r '.[0].url')
+echo "Voici ton image de chat $CAT_IMG "
+```
+
+🌞 Stocker le fichier id.sh dans /opt
+🌞 Prouvez que tout le monde peut exécuter le script
+```bash
+[unuser@node1 scripts]$ ls -la /opt/ | grep id.sh
+-rwxr-xr-x.  1 unuser unuser 305 Dec 11 17:28 id.sh
+```

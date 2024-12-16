@@ -1,0 +1,10 @@
+[Unit]
+Description=permet de télécharger des videos youtube a partir de leur lien
+[Service]
+Type=oneshot
+ExecStart=/opt/yt/yt-next-gen.sh
+User=yt
+
+[Install]
+WantedBy=multi-user.target
+

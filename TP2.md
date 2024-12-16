@@ -141,3 +141,13 @@ echo "Voici ton image de chat $CAT_IMG "
 [unuser@node1 yt]$ cat download.log 
 12/11/24 22:24:28 Video https://youtu.be/KjoJSB_ZpVk?si=nse1US5b2kUUvW38 was downloaded. File path: /opt/yt/downloads/reuf_five
 ```
+## C.rendu attendu
+
+🌞 Toutes les commandes que vous utilisez
+
+
+entre autre
+```bash
+  sudo chmod g+w URL_vids_download.txt
+  sudo chmod g+w downloads/
+```

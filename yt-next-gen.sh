@@ -8,7 +8,7 @@ if [[ -z "$PATH_LOG" ]] ; then
 fi
 
 
-while read super_line; do
+while read -r super_line; do
 
     titre=$(yt-dlp --get-title "$super_line")
 

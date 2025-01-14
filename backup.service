@@ -1,0 +1,8 @@
+  GNU nano 5.6.1                                        backup.service                                                  [Unit]
+Description=Sert a sauvegardé la musique sur un serveur de backup
+[Service]
+Type=oneshot
+ExecStart=/opt/backup.sh
+RemainAfterExit=yes
+[Install]
+WantedBy=multi-user.target

@@ -174,3 +174,15 @@ Writing superblocks and filesystem accounting information: done
      Active: inactive (dead)
 
 ```
+
+🌞 Faire un test et prouvez que ça a fonctionné
+```
+[unuser@music system]$ date
+Tue Jan 14 06:48:12 PM CET 2025
+[unuser@music system]$ sudo systemctl start backup
+[unuser@music system]$ cd /mnt/music_backup/
+[unuser@music music_backup]$ ls
+music_250112_180427.tar.gz  music_250112_181159.tar.gz  music_250112_190317.tar.gz  music_250114_184823.tar.gz <----- sauvegarde 
+music_250112_180914.tar.gz  music_250112_184720.tar.gz  music_250112_190540.tar.gz
+music_250112_181111.tar.gz  music_250112_185252.tar.gz  music_250112_190703.tar.gz
+```

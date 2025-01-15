@@ -127,23 +127,6 @@ Writing superblocks and filesystem accounting information: done
 [unuser@backup mnt]$ sudo mount /dev/data/backup_data /mnt/backup/
 ```
 
-🌞 Configurer un montage automatique de la partition
-
-```bash
-#
-# /etc/fstab
-# Created by anaconda on Fri Jan 10 14:03:32 2025
-#
-# Accessible filesystems, by reference, are maintained under '/dev/disk/'.
-# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info.#
-# After editing this file, run 'systemctl daemon-reload' to update systemd
-# units generated from this file.
-#
-/dev/mapper/rl_vbox-root /                       xfs     defaults        0 0UUID=edd507b4-c0c0-4aee-b99e-a56b0d3a6c0a /boot                   xfs     d>/dev/mapper/rl_vbox-swap none                    swap    defaults        0 0
-/dev/data/backup_data /mnt/backup    ext4    defaults        0 0
-```
-
-
 ## El cliente
 
 🌞 Essayer d'accéder au dossier partagé
@@ -152,17 +135,21 @@ Writing superblocks and filesystem accounting information: done
 ```
 🌞 Configurer un montage automatique
 ```bash
-  GNU nano 5.6.1                    /etc/fstab
+[unuser@music ~]$ cat /etc/fstab
 #
 # /etc/fstab
 # Created by anaconda on Fri Jan 10 14:03:32 2025
 #
 # Accessible filesystems, by reference, are maintained under '/dev/disk/'.
-# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info.#
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info.
+#
 # After editing this file, run 'systemctl daemon-reload' to update systemd
 # units generated from this file.
 #
-/dev/mapper/rl_vbox-root /                       xfs     defaults        0 0UUID=edd507b4-c0c0-4aee-b99e-a56b0d3a6c0a /boot                   xfs     d>/dev/mapper/rl_vbox-swap none                    swap    defaults        0 010.3.1.13:/mnt/music_backup/ /mnt/music_backup   nfs     defaults        0 0
+/dev/mapper/rl_vbox-root /                       xfs     defaults        0 0
+UUID=edd507b4-c0c0-4aee-b99e-a56b0d3a6c0a /boot                   xfs     defaults        0 0
+/dev/mapper/rl_vbox-swap none                    swap    defaults        0 0
+10.3.1.13:/mnt/music_backup/ /mnt/music_backup   nfs     defaults        0 0
 ```
 
 🌞 Utiliser et tester le nouveau service

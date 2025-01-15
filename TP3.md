@@ -130,7 +130,6 @@ Writing superblocks and filesystem accounting information: done
 🌞 Configurer un montage automatique de la partition
 
 ```bash
-
 #
 # /etc/fstab
 # Created by anaconda on Fri Jan 10 14:03:32 2025
@@ -140,7 +139,8 @@ Writing superblocks and filesystem accounting information: done
 # After editing this file, run 'systemctl daemon-reload' to update systemd
 # units generated from this file.
 #
-/dev/mapper/rl_vbox-root /                       xfs     defaults        0 0UUID=edd507b4-c0c0-4aee-b99e-a56b0d3a6c0a /boot                   xfs     d>/dev/mapper/rl_vbox-swap none                    swap    defaults        0 0/dev/data/backup_data /mnt/backup                ext4    defaults        0 >
+/dev/mapper/rl_vbox-root /                       xfs     defaults        0 0UUID=edd507b4-c0c0-4aee-b99e-a56b0d3a6c0a /boot                   xfs     d>/dev/mapper/rl_vbox-swap none                    swap    defaults        0 0
+/dev/data/backup_data /mnt/backup    ext4    defaults        0 0
 ```
 
 
